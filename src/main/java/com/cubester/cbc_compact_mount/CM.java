@@ -1,6 +1,7 @@
-package com.tryzubnyy.ymw;
+package com.cubester.cbc_compact_mount;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.cubester.cbc_compact_mount.forge.CMForgeEvents;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -8,22 +9,24 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
-@Mod(YMW.MODID)
-public class YMW {
-	public static final String MODID = "ymw";
+@Mod(CM.MODID)
+public class CM {
+	public static final String MODID = "cbc_compact_mount";
 	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
 
-	public YMW() {
+	public CM() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		REGISTRATE.registerEventListeners(modEventBus);
 
-		YMWBlocks.register();
-		YMWEntities.register();
-		YMWCreativeTabs.register(modEventBus);
+		CMBlocks.register();
+		CMEntities.register();
+		CMCreativeTabs.register(modEventBus);
+
+		modEventBus.addListener(CMForgeEvents::onRegister);
 	}
 
 	public void onServerStarting(ServerStartingEvent event) {
-		LOGGER.info("Вітаю!");
+		LOGGER.info("Hello from CBC: Compact Mount!");
 	}
 }

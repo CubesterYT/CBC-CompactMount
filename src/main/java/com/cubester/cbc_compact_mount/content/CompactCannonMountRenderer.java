@@ -1,4 +1,4 @@
-package com.tryzubnyy.ymw.content;
+package com.cubester.cbc_compact_mount.content;
 
 import static com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer.getAngleForBe;
 import static com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer.kineticRotationTransform;
@@ -19,12 +19,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import rbasamoyai.createbigcannons.index.CBCBlockPartials;
 
 public class CompactCannonMountRenderer extends SafeBlockEntityRenderer<CompactCannonMountBlockEntity> {
-
-	public CompactCannonMountRenderer(BlockEntityRendererProvider.Context context) {}
+	public CompactCannonMountRenderer(BlockEntityRendererProvider.Context context) {
+	}
 
 	@Override
-	protected void renderSafe(CompactCannonMountBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-		if (VisualizationManager.supportsVisualization(be.getLevel())) return;
+	protected void renderSafe(CompactCannonMountBlockEntity be, float partialTicks, PoseStack ms,
+			MultiBufferSource buffer, int light, int overlay) {
+		if (VisualizationManager.supportsVisualization(be.getLevel()))
+			return;
 
 		BlockState state = be.getBlockState();
 		Direction facing = state.getValue(CompactCannonMountBlock.FACING);
@@ -35,7 +37,7 @@ public class CompactCannonMountRenderer extends SafeBlockEntityRenderer<CompactC
 		Direction.Axis pitchAxis = facing.getClockWise().getAxis();
 		SuperByteBuffer pitchShaft = CachedBuffers.block(shaft(pitchAxis));
 		kineticRotationTransform(pitchShaft, be, pitchAxis, getAngleForBe(be, be.getBlockPos(), pitchAxis), light)
-			.renderInto(ms, solidBuf);
+				.renderInto(ms, solidBuf);
 
 		float pitch = be.getPitchOffset(partialTicks);
 		Quaternionf qpitch;
@@ -52,12 +54,12 @@ public class CompactCannonMountRenderer extends SafeBlockEntityRenderer<CompactC
 		float tz = right.getStepZ();
 
 		CachedBuffers.partialFacing(CBCBlockPartials.CANNON_CARRIAGE_AXLE, state, Direction.NORTH)
-			.translate(tx, ty, tz)
-			.center()
-			.rotate(qpitch)
-			.uncenter()
-			.light(light)
-			.renderInto(ms, solidBuf);
+				.translate(tx, ty, tz)
+				.center()
+				.rotate(qpitch)
+				.uncenter()
+				.light(light)
+				.renderInto(ms, solidBuf);
 
 		ms.popPose();
 	}

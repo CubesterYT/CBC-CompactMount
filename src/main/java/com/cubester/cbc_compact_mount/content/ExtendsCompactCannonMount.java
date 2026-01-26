@@ -1,4 +1,4 @@
-package com.tryzubnyy.ymw.content;
+package com.cubester.cbc_compact_mount.content;
 
 import java.util.List;
 
@@ -20,34 +20,42 @@ import rbasamoyai.createbigcannons.config.CBCConfigs;
 public interface ExtendsCompactCannonMount {
 	MutableComponent noCannonPresent = Component.translatable("createbigcannons.goggles.cannon_mount.no_cannon_present");
 	MutableComponent cannonPitchComponent = Component.translatable("createbigcannons.goggles.cannon_mount.pitch");
-	MutableComponent bigCannonStrengthComponent = Component.translatable("createbigcannons.goggles.cannon_mount.cannon_strength");
+	MutableComponent bigCannonStrengthComponent = Component
+			.translatable("createbigcannons.goggles.cannon_mount.cannon_strength");
 	String bigCannonStrengthValueKey = "createbigcannons.goggles.cannon_mount.cannon_strength.value";
-	MutableComponent autocannonRPMComponent = Component.translatable("createbigcannons.goggles.cannon_mount.autocannon_rate_of_fire");
+	MutableComponent autocannonRPMComponent = Component
+			.translatable("createbigcannons.goggles.cannon_mount.autocannon_rate_of_fire");
 	String autocannonRPMValueKey = "createbigcannons.goggles.cannon_mount.autocannon_rate_of_fire.value";
 
-    CompactCannonMountBlockEntity getCannonMount();
+	CompactCannonMountBlockEntity getCannonMount();
 
-    static void addCannonInfoToTooltip(List<Component> tooltip, @Nullable PitchOrientedContraptionEntity mountedContraption) {
-		if (mountedContraption != null && mountedContraption.getContraption() instanceof AbstractMountedCannonContraption cannon) {
+	static void addCannonInfoToTooltip(List<Component> tooltip,
+			@Nullable PitchOrientedContraptionEntity mountedContraption) {
+		if (mountedContraption != null
+				&& mountedContraption.getContraption() instanceof AbstractMountedCannonContraption cannon) {
 			Direction dir = mountedContraption.getInitialOrientation();
-			boolean flag = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir.getAxis() == Direction.Axis.X);
+			boolean flag = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir
+					.getAxis() == Direction.Axis.X);
 			float pitch = flag ? mountedContraption.pitch : -mountedContraption.pitch;
-			if (Math.abs(pitch) < 1e-1f) pitch = 0;
+			if (Math.abs(pitch) < 1e-1f)
+				pitch = 0;
 
 			String precision = CBCConfigs.client().cannonMountAngleGoggleTooltipPrecision.get().toString();
 			String format = "%." + precision + "f\u00ba";
-			
+
 			CreateLang.builder().add(cannonPitchComponent.copy().withStyle(ChatFormatting.GRAY)
 					.append(Component.literal(String.format(format, Mth.wrapDegrees(pitch))).withStyle(ChatFormatting.WHITE)))
-				.forGoggles(tooltip);
+					.forGoggles(tooltip);
 			if (cannon instanceof MountedBigCannonContraption bigCannon) {
 				CreateLang.builder().add(bigCannonStrengthComponent.copy().withStyle(ChatFormatting.GRAY)
-						.append(Component.translatable(bigCannonStrengthValueKey, bigCannon.getMaxSafeCharges()).withStyle(ChatFormatting.WHITE)))
-					.forGoggles(tooltip);
+						.append(Component.translatable(bigCannonStrengthValueKey, bigCannon.getMaxSafeCharges())
+								.withStyle(ChatFormatting.WHITE)))
+						.forGoggles(tooltip);
 			} else if (cannon instanceof MountedAutocannonContraption autocannon) {
 				CreateLang.builder().add(autocannonRPMComponent.copy().withStyle(ChatFormatting.GRAY)
-						.append(Component.translatable(autocannonRPMValueKey, autocannon.getReferencedFireRate()).withStyle(ChatFormatting.WHITE)))
-					.forGoggles(tooltip);
+						.append(Component.translatable(autocannonRPMValueKey, autocannon.getReferencedFireRate())
+								.withStyle(ChatFormatting.WHITE)))
+						.forGoggles(tooltip);
 			}
 		} else {
 			CreateLang.builder().add(noCannonPresent.copy()).forGoggles(tooltip);

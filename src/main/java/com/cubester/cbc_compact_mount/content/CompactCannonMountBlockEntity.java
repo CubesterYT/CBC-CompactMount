@@ -1,4 +1,4 @@
-package com.tryzubnyy.ymw.content;
+package com.cubester.cbc_compact_mount.content;
 
 import static net.minecraft.ChatFormatting.GRAY;
 import java.util.List;
@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import com.tryzubnyy.ymw.YMWBlocks;
+import com.cubester.cbc_compact_mount.CMBlocks;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
@@ -35,7 +35,8 @@ import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContr
 import rbasamoyai.createbigcannons.cannons.CannonContraptionProviderBlock;
 import com.simibubi.create.content.kinetics.transmission.sequencer.SequencerInstructions;
 
-public class CompactCannonMountBlockEntity extends KineticBlockEntity implements IDisplayAssemblyExceptions, ControlPitchContraption.Block, ExtendsCannonMount, IHaveGoggleInformation {
+public class CompactCannonMountBlockEntity extends KineticBlockEntity
+		implements IDisplayAssemblyExceptions, ControlPitchContraption.Block, ExtendsCannonMount, IHaveGoggleInformation {
 
 	private AssemblyException lastException = null;
 	protected PitchOrientedContraptionEntity mountedContraption;
@@ -86,7 +87,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 		boolean flag = this.mountedContraption != null && this.mountedContraption.canBeTurnedByController(this);
 
 		if (this.getLevel().isClientSide) {
-			if (this.running) flag = true;
+			if (this.running)
+				flag = true;
 			this.clientPitchDiff = flag ? this.clientPitchDiff * 0.5f : 0;
 		}
 
@@ -107,11 +109,13 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 			float sgn = 1f;
 			if (this.mountedContraption != null) {
 				Direction dir = this.mountedContraption.getInitialOrientation();
-				boolean flag1 = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir.getAxis() == Direction.Axis.X);
+				boolean flag1 = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir
+						.getAxis() == Direction.Axis.X);
 				sgn = flag1 ? 1 : -1;
 			} else {
 				Direction dir = this.getBlockState().getValue(CompactCannonMountBlock.FACING).getClockWise();
-				boolean flag1 = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir.getAxis() == Direction.Axis.X);
+				boolean flag1 = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir
+						.getAxis() == Direction.Axis.X);
 				sgn = flag1 ? 1 : -1;
 			}
 
@@ -147,7 +151,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 	}
 
 	protected void applyRotation() {
-		if (this.mountedContraption == null) return;
+		if (this.mountedContraption == null)
+			return;
 
 		Direction dir = this.mountedContraption.getInitialOrientation();
 		boolean flag = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (dir.getAxis() == Direction.Axis.X);
@@ -164,9 +169,11 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 		}
 	}
 
-	public void onRedstoneUpdate(boolean assemblyPowered, boolean prevAssemblyPowered, boolean firePowered, boolean prevFirePowered, int firePower) {
+	public void onRedstoneUpdate(boolean assemblyPowered, boolean prevAssemblyPowered, boolean firePowered,
+			boolean prevFirePowered, int firePower) {
 		if (assemblyPowered != prevAssemblyPowered) {
-			this.getLevel().setBlock(this.worldPosition, this.getBlockState().setValue(CompactCannonMountBlock.ASSEMBLY_POWERED, assemblyPowered), 3);
+			this.getLevel().setBlock(this.worldPosition,
+					this.getBlockState().setValue(CompactCannonMountBlock.ASSEMBLY_POWERED, assemblyPowered), 3);
 			if (assemblyPowered) {
 				try {
 					this.assemble();
@@ -181,10 +188,12 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 			}
 		}
 		if (firePowered != prevFirePowered) {
-			this.getLevel().setBlock(this.worldPosition, this.getBlockState().setValue(CompactCannonMountBlock.FIRE_POWERED, firePowered), 3);
+			this.getLevel().setBlock(this.worldPosition,
+					this.getBlockState().setValue(CompactCannonMountBlock.FIRE_POWERED, firePowered), 3);
 		}
 		if (this.running && this.mountedContraption != null && this.getLevel() instanceof ServerLevel slevel) {
-			((AbstractMountedCannonContraption) this.mountedContraption.getContraption()).onRedstoneUpdate(slevel, this.mountedContraption, firePowered != prevFirePowered, firePower, this);
+			((AbstractMountedCannonContraption) this.mountedContraption.getContraption()).onRedstoneUpdate(slevel,
+					this.mountedContraption, firePowered != prevFirePowered, firePower, this);
 		}
 	}
 
@@ -197,7 +206,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 	}
 
 	public float getPitchOffset(float partialTicks) {
-		float modifier = this.mountedContraption != null && this.mountedContraption.getInitialOrientation() == Direction.DOWN ? -1 : 1;
+		float modifier = this.mountedContraption != null
+				&& this.mountedContraption.getInitialOrientation() == Direction.DOWN ? -1 : 1;
 		if (this.isVirtual())
 			return Mth.lerp(partialTicks + 0.5f, this.prevPitch, this.cannonPitch) * modifier;
 		if (this.mountedContraption == null || this.mountedContraption.isStalled() || !this.running)
@@ -205,7 +215,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 
 		if (this.mountedContraption != null && !this.mountedContraption.canBeTurnedByController(this)) {
 			Direction facing = this.getContraptionDirection();
-			boolean flag = (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (facing.getAxis() == Direction.Axis.X);
+			boolean flag = (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) == (facing
+					.getAxis() == Direction.Axis.X);
 			float sgn = flag ? 1 : -1;
 			return this.mountedContraption.getViewXRot(partialTicks) * sgn * modifier;
 		}
@@ -215,11 +226,13 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 	}
 
 	public Direction getContraptionDirection() {
-		return this.mountedContraption == null ? this.getBlockState().getValue(CompactCannonMountBlock.FACING) : ((AbstractMountedCannonContraption) this.mountedContraption.getContraption()).initialOrientation();
+		return this.mountedContraption == null ? this.getBlockState().getValue(CompactCannonMountBlock.FACING)
+				: ((AbstractMountedCannonContraption) this.mountedContraption.getContraption()).initialOrientation();
 	}
 
 	protected void assemble() throws AssemblyException {
-		if (!YMWBlocks.COMPACT_CANNON_MOUNT.has(this.getBlockState())) return;
+		if (!CMBlocks.COMPACT_CANNON_MOUNT.has(this.getBlockState()))
+			return;
 
 		Direction facing = this.getBlockState().getValue(CompactCannonMountBlock.FACING);
 		Direction assemblyDir = facing.getClockWise();
@@ -230,20 +243,21 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 		}
 
 		AbstractMountedCannonContraption mountedCannon = this.getContraption(assemblyPos);
-		if (mountedCannon == null || !mountedCannon.assemble(this.getLevel(), assemblyPos)) return;
+		if (mountedCannon == null || !mountedCannon.assemble(this.getLevel(), assemblyPos))
+			return;
 
 		Direction facing1 = mountedCannon.initialOrientation();
-		if (facing.getAxis() != facing1.getAxis()) return;
+		if (facing.getAxis() != facing1.getAxis())
+			return;
 		this.running = true;
 
 		mountedCannon.removeBlocksFromWorld(this.getLevel(), BlockPos.ZERO);
 
 		PitchOrientedContraptionEntity contraptionEntity = PitchOrientedContraptionEntity.create(
-			this.getLevel(),
-			mountedCannon,
-			facing1,
-			this
-		);
+				this.getLevel(),
+				mountedCannon,
+				facing1,
+				this);
 
 		this.mountedContraption = contraptionEntity;
 		this.resetContraptionToOffset();
@@ -254,11 +268,14 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 	}
 
 	private AbstractMountedCannonContraption getContraption(BlockPos pos) {
-		return this.level.getBlockState(pos).getBlock() instanceof CannonContraptionProviderBlock provBlock ? provBlock.getCannonContraption() : null;
+		return this.level.getBlockState(pos).getBlock() instanceof CannonContraptionProviderBlock provBlock
+				? provBlock.getCannonContraption()
+				: null;
 	}
 
 	public void disassemble() {
-		if (!this.running && this.mountedContraption == null) return;
+		if (!this.running && this.mountedContraption == null)
+			return;
 		if (this.mountedContraption != null) {
 			this.resetContraptionToOffset();
 			this.mountedContraption.save(new CompoundTag());
@@ -269,7 +286,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 	}
 
 	protected void resetContraptionToOffset() {
-		if (this.mountedContraption == null) return;
+		if (this.mountedContraption == null)
+			return;
 		this.cannonPitch = 0;
 		this.prevPitch = 0;
 
@@ -288,7 +306,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 
 	public float calculateCannonStressApplied() {
 		if (this.running && this.mountedContraption != null) {
-			AbstractMountedCannonContraption contraption = (AbstractMountedCannonContraption) this.mountedContraption.getContraption();
+			AbstractMountedCannonContraption contraption = (AbstractMountedCannonContraption) this.mountedContraption
+					.getContraption();
 			return contraption.getWeightForStress();
 		}
 		return 0.0f;
@@ -315,7 +334,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 		this.cannonPitch = tag.getFloat("CannonPitch");
 		this.lastException = AssemblyException.read(tag);
 
-		if (!clientPacket) return;
+		if (!clientPacket)
+			return;
 
 		if (this.running) {
 			if (oldRunning && (this.mountedContraption == null || !this.mountedContraption.isStalled())) {
@@ -342,7 +362,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 
 	@Override
 	public void attach(PitchOrientedContraptionEntity contraption) {
-		if (!(contraption.getContraption() instanceof AbstractMountedCannonContraption)) return;
+		if (!(contraption.getContraption() instanceof AbstractMountedCannonContraption))
+			return;
 		this.mountedContraption = contraption;
 		if (!this.getLevel().isClientSide) {
 			this.running = true;
@@ -352,7 +373,8 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 
 	@Override
 	public void onStall() {
-		if (!this.getLevel().isClientSide) this.sendData();
+		if (!this.getLevel().isClientSide)
+			this.sendData();
 	}
 
 	@Override
@@ -371,8 +393,10 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 	}
 
 	public Vec3 getInteractionLocation() {
-		return this.mountedContraption != null && this.mountedContraption.getContraption() instanceof AbstractMountedCannonContraption cannon
-			? cannon.getInteractionVec(this.mountedContraption) : Vec3.atCenterOf(this.worldPosition);
+		return this.mountedContraption != null
+				&& this.mountedContraption.getContraption() instanceof AbstractMountedCannonContraption cannon
+						? cannon.getInteractionVec(this.mountedContraption)
+						: Vec3.atCenterOf(this.worldPosition);
 	}
 
 	@Nullable
@@ -391,11 +415,11 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity implements
 				float stressTotal = pitchStress * Math.abs(this.getTheoreticalSpeed());
 
 				CreateLang.number(stressTotal)
-					.translate("generic.unit.stress")
-					.style(ChatFormatting.AQUA)
-					.space()
-					.add(CreateLang.translate("gui.goggles.at_current_speed").style(ChatFormatting.DARK_GRAY))
-					.forGoggles(tooltip, 1);
+						.translate("generic.unit.stress")
+						.style(ChatFormatting.AQUA)
+						.space()
+						.add(CreateLang.translate("gui.goggles.at_current_speed").style(ChatFormatting.DARK_GRAY))
+						.forGoggles(tooltip, 1);
 			}
 		}
 		ExtendsCompactCannonMount.addCannonInfoToTooltip(tooltip, this.mountedContraption);

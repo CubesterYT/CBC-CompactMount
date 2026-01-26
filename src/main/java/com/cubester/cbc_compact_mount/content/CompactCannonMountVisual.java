@@ -1,4 +1,4 @@
-package com.tryzubnyy.ymw.content;
+package com.cubester.cbc_compact_mount.content;
 
 import java.util.function.Consumer;
 import org.joml.Quaternionf;
@@ -17,7 +17,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LightLayer;
 import rbasamoyai.createbigcannons.index.CBCBlockPartials;
 
-public class CompactCannonMountVisual extends KineticBlockEntityVisual<CompactCannonMountBlockEntity> implements SimpleDynamicVisual {
+public class CompactCannonMountVisual extends KineticBlockEntityVisual<CompactCannonMountBlockEntity>
+		implements SimpleDynamicVisual {
 
 	private OrientedInstance rotatingMountShaft;
 	private RotatingInstance pitchShaft;
@@ -31,7 +32,8 @@ public class CompactCannonMountVisual extends KineticBlockEntityVisual<CompactCa
 		Direction facing = tile.getBlockState().getValue(CompactCannonMountBlock.FACING);
 		Direction.Axis pitchAxis = facing.getClockWise().getAxis();
 
-		this.rotatingMountShaft = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(CBCBlockPartials.CANNON_CARRIAGE_AXLE)).createInstance();
+		this.rotatingMountShaft = instancerProvider()
+				.instancer(InstanceTypes.ORIENTED, Models.partial(CBCBlockPartials.CANNON_CARRIAGE_AXLE)).createInstance();
 
 		Direction right = facing.getClockWise();
 		this.rotatingMountShaft.position(getVisualPosition().relative(right));
@@ -39,11 +41,11 @@ public class CompactCannonMountVisual extends KineticBlockEntityVisual<CompactCa
 		Direction shaftOrientation = Direction.get(Direction.AxisDirection.POSITIVE, pitchAxis);
 
 		this.pitchShaft = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFT))
-			.createInstance()
-			.rotateToFace(shaftOrientation)
-			.setup(blockEntity)
-			.setColor(blockEntity)
-			.setPosition(getVisualPosition());
+				.createInstance()
+				.rotateToFace(shaftOrientation)
+				.setup(blockEntity)
+				.setColor(blockEntity)
+				.setPosition(getVisualPosition());
 
 		this.pitchShaft.light(blockLight, skyLight).setChanged();
 
@@ -65,10 +67,10 @@ public class CompactCannonMountVisual extends KineticBlockEntityVisual<CompactCa
 
 	protected void updateRotation(RotatingInstance instance, Direction.Axis axis, float speed) {
 		instance.setRotationAxis(axis)
-			.setRotationalSpeed(speed)
-			.setRotationOffset(rotationOffset(blockState, axis, pos))
-			.setColor(this.blockEntity)
-			.setChanged();
+				.setRotationalSpeed(speed)
+				.setRotationOffset(rotationOffset(blockState, axis, pos))
+				.setColor(this.blockEntity)
+				.setChanged();
 	}
 
 	@Override

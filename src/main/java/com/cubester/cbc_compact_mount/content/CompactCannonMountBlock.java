@@ -1,4 +1,4 @@
-package com.tryzubnyy.ymw.content;
+package com.cubester.cbc_compact_mount.content;
 
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
@@ -21,10 +21,9 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import com.tryzubnyy.ymw.YMWEntities;
+import com.cubester.cbc_compact_mount.CMEntities;
 
 public class CompactCannonMountBlock extends KineticBlock implements IBE<CompactCannonMountBlockEntity> {
-
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty ASSEMBLY_POWERED = BooleanProperty.create("assembly_powered");
 	public static final BooleanProperty FIRE_POWERED = BooleanProperty.create("fire_powered");
@@ -32,9 +31,9 @@ public class CompactCannonMountBlock extends KineticBlock implements IBE<Compact
 	public CompactCannonMountBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any()
-			.setValue(FACING, Direction.NORTH)
-			.setValue(ASSEMBLY_POWERED, false)
-			.setValue(FIRE_POWERED, false));
+				.setValue(FACING, Direction.NORTH)
+				.setValue(ASSEMBLY_POWERED, false)
+				.setValue(FIRE_POWERED, false));
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class CompactCannonMountBlock extends KineticBlock implements IBE<Compact
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState()
-			.setValue(FACING, context.getHorizontalDirection());
+				.setValue(FACING, context.getHorizontalDirection());
 	}
 
 	@Override
@@ -76,11 +75,12 @@ public class CompactCannonMountBlock extends KineticBlock implements IBE<Compact
 
 	@Override
 	public BlockEntityType<? extends CompactCannonMountBlockEntity> getBlockEntityType() {
-		return YMWEntities.COMPACT_CANNON_MOUNT.get();
+		return CMEntities.COMPACT_CANNON_MOUNT.get();
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
+			boolean isMoving) {
 		if (!level.isClientSide) {
 			if (!level.getBlockTicks().willTickThisTick(pos, this)) {
 				level.scheduleTick(pos, this, 0);
@@ -99,7 +99,8 @@ public class CompactCannonMountBlock extends KineticBlock implements IBE<Compact
 		Direction fireDirection = state.getValue(FACING);
 		int firePower = level.getSignal(pos.relative(fireDirection), fireDirection);
 
-		this.withBlockEntityDo(level, pos, cmbe -> cmbe.onRedstoneUpdate(assemblyPowered, prevAssemblyPowered, firePowered, prevFirePowered, firePower));
+		this.withBlockEntityDo(level, pos,
+				cmbe -> cmbe.onRedstoneUpdate(assemblyPowered, prevAssemblyPowered, firePowered, prevFirePowered, firePower));
 	}
 
 	private boolean hasNeighborSignal(Level level, BlockState state, BlockPos pos, BooleanProperty property) {
@@ -118,7 +119,7 @@ public class CompactCannonMountBlock extends KineticBlock implements IBE<Compact
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
 		InteractionResult resultType = super.onWrenched(state, context);
 		if (!context.getLevel().isClientSide && resultType.consumesAction()
-			&& context.getLevel().getBlockEntity(context.getClickedPos()) instanceof CompactCannonMountBlockEntity mount) {
+				&& context.getLevel().getBlockEntity(context.getClickedPos()) instanceof CompactCannonMountBlockEntity mount) {
 			mount.disassemble();
 		}
 		return resultType;
