@@ -9,7 +9,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 public class CMCreativeTabs {
-
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister
 			.create(Registries.CREATIVE_MODE_TAB, CM.MODID);
 

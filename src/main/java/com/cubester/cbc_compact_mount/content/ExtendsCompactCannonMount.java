@@ -17,6 +17,7 @@ import rbasamoyai.createbigcannons.cannon_control.contraption.MountedBigCannonCo
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 
+// TODO: Figure out how to implement manual pitch control with autocannons
 public interface ExtendsCompactCannonMount {
 	MutableComponent noCannonPresent = Component.translatable("createbigcannons.goggles.cannon_mount.no_cannon_present");
 	MutableComponent cannonPitchComponent = Component.translatable("createbigcannons.goggles.cannon_mount.pitch");

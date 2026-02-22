@@ -25,6 +25,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import com.cubester.cbc_compact_mount.CMBlocks;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
@@ -65,7 +68,7 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 	@Nullable
 	@Override
 	public ResourceLocation getTypeId() {
-		return CreateBigCannons.resource("compact_cannon_mount");
+		return CreateBigCannons.resource("cannon_mount");
 	}
 
 	@Override
@@ -353,6 +356,15 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 		if (!this.getLevel().isClientSide)
 			this.disassemble();
 		super.remove();
+	}
+
+	// TODO: Figure out why hoppers won't work
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+		if (cap == ForgeCapabilities.ITEM_HANDLER && this.mountedContraption != null) {
+			return this.mountedContraption.getCapability(cap, side).cast();
+		}
+		return super.getCapability(cap, side);
 	}
 
 	@Override
