@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.AllArmInteractionPointTypes;
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
 
@@ -31,7 +32,7 @@ import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.quickfiring_bree
 public class CMArmInteractionPointTypes {
   public static void init() {
     Registry.register(CreateBuiltInRegistries.ARM_INTERACTION_POINT_TYPE,
-        new ResourceLocation(CM.MODID, "compact_cannon_mount"), new CompactCannonMountType());
+        ResourceLocation.fromNamespaceAndPath(CM.MODID, "compact_cannon_mount"), new CompactCannonMountType());
   }
 
   public static class CompactCannonMountType extends ArmInteractionPointType {
@@ -68,29 +69,29 @@ public class CMArmInteractionPointTypes {
       return super.getInteractionPositionVector();
     }
 
-    @Override
-    public ItemStack insert(ItemStack stack, boolean simulate) {
-      BlockEntity be = this.getLevel().getBlockEntity(this.pos);
-      PitchOrientedContraptionEntity poce = null;
+      @Override
+      public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
+          BlockEntity be = this.getLevel().getBlockEntity(this.pos);
+          PitchOrientedContraptionEntity poce = null;
 
-      if (be instanceof CompactCannonMountBlockEntity mount) {
-        poce = mount.getContraption();
-      } else if (be instanceof ExtendsCannonMount extendsMount) {
-        CannonMountBlockEntity base = extendsMount.getCannonMount();
-        if (base != null)
-          poce = base.getContraption();
-      }
+          if (be instanceof CompactCannonMountBlockEntity mount) {
+              poce = mount.getContraption();
+          } else if (be instanceof ExtendsCannonMount extendsMount) {
+              CannonMountBlockEntity base = extendsMount.getCannonMount();
+              if (base != null)
+                  poce = base.getContraption();
+          }
 
-      if (poce == null || !(poce.getContraption() instanceof AbstractMountedCannonContraption cannon))
-        return stack;
+          if (poce == null || !(poce.getContraption() instanceof AbstractMountedCannonContraption cannon))
+              return stack;
 
-      if (cannon instanceof MountedBigCannonContraption big) {
-        return CannonMountPoint.bigCannonInsert(stack, simulate, big, poce);
+          if (cannon instanceof MountedBigCannonContraption big) {
+              return CannonMountPoint.bigCannonInsert(stack, simulate, big, poce);
+          }
+          if (cannon instanceof MountedAutocannonContraption auto) {
+              return CannonMountPoint.autocannonInsert(stack, simulate, auto, poce);
+          }
+          return stack;
       }
-      if (cannon instanceof MountedAutocannonContraption auto) {
-        return CannonMountPoint.autocannonInsert(stack, simulate, auto, poce);
-      }
-      return stack;
-    }
   }
 }

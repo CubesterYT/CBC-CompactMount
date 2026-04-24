@@ -16,6 +16,7 @@ import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,9 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import com.cubester.cbc_compact_mount.CMBlocks;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
@@ -322,20 +320,20 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 	}
 
 	@Override
-	protected void write(CompoundTag tag, boolean clientPacket) {
-		super.write(tag, clientPacket);
+	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+		super.write(tag, registries,clientPacket);
 		tag.putBoolean("Running", this.running);
 		tag.putFloat("CannonPitch", this.cannonPitch);
-		AssemblyException.write(tag, this.lastException);
+		AssemblyException.write(tag, registries, this.lastException);
 	}
 
 	@Override
-	protected void read(CompoundTag tag, boolean clientPacket) {
-		super.read(tag, clientPacket);
+	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+		super.read(tag, registries, clientPacket);
 		boolean oldRunning = this.running;
 		this.running = tag.getBoolean("Running");
 		this.cannonPitch = tag.getFloat("CannonPitch");
-		this.lastException = AssemblyException.read(tag);
+		this.lastException = AssemblyException.read(tag, registries);
 
 		if (!clientPacket)
 			return;
@@ -356,15 +354,6 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 		if (!this.getLevel().isClientSide)
 			this.disassemble();
 		super.remove();
-	}
-
-	// TODO: Figure out why hoppers won't work
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-		if (cap == ForgeCapabilities.ITEM_HANDLER && this.mountedContraption != null) {
-			return this.mountedContraption.getCapability(cap, side).cast();
-		}
-		return super.getCapability(cap, side);
 	}
 
 	@Override
@@ -394,10 +383,10 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 		return this.worldPosition;
 	}
 
-	@Override
-	public BlockPos getDismountPositionForContraption(PitchOrientedContraptionEntity poce) {
-		return this.worldPosition.above();
-	}
+    @Override
+    public Vec3 getDismountPositionForContraption(PitchOrientedContraptionEntity poce) {
+        return Vec3.atBottomCenterOf(this.worldPosition.above());
+    }
 
 	@Override
 	public AssemblyException getLastAssemblyException() {
