@@ -26,6 +26,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import com.cubester.cbc_compact_mount.CMBlocks;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
@@ -67,6 +69,12 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 	@Override
 	public ResourceLocation getTypeId() {
 		return CreateBigCannons.resource("cannon_mount");
+	}
+
+	@Nullable
+	public IItemHandler getItemHandler(Direction side) {
+		return this.mountedContraption != null ? this.mountedContraption.getCapability(Capabilities.ItemHandler.ENTITY)
+				: null;
 	}
 
 	@Override
@@ -321,7 +329,7 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 
 	@Override
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
-		super.write(tag, registries,clientPacket);
+		super.write(tag, registries, clientPacket);
 		tag.putBoolean("Running", this.running);
 		tag.putFloat("CannonPitch", this.cannonPitch);
 		AssemblyException.write(tag, registries, this.lastException);
@@ -383,10 +391,10 @@ public class CompactCannonMountBlockEntity extends KineticBlockEntity
 		return this.worldPosition;
 	}
 
-    @Override
-    public Vec3 getDismountPositionForContraption(PitchOrientedContraptionEntity poce) {
-        return Vec3.atBottomCenterOf(this.worldPosition.above());
-    }
+	@Override
+	public Vec3 getDismountPositionForContraption(PitchOrientedContraptionEntity poce) {
+		return Vec3.atBottomCenterOf(this.worldPosition.above());
+	}
 
 	@Override
 	public AssemblyException getLastAssemblyException() {

@@ -2,8 +2,12 @@ package com.cubester.cbc_compact_mount;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.cubester.cbc_compact_mount.neoforge.CMNeoForgeEvents;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -12,7 +16,8 @@ import com.mojang.logging.LogUtils;
 public class CM {
 	public static final String MODID = "cbc_compact_mount";
 	private static final Logger LOGGER = LogUtils.getLogger();
-	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
+	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
+			.defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
 
 	public CM(IEventBus modEventBus) {
 		REGISTRATE.registerEventListeners(modEventBus);
@@ -22,6 +27,14 @@ public class CM {
 		CMCreativeTabs.register(modEventBus);
 
 		modEventBus.addListener(CMNeoForgeEvents::onRegister);
+		modEventBus.addListener(CM::registerCapabilities);
+	}
+
+	private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(
+				Capabilities.ItemHandler.BLOCK,
+				CMEntities.COMPACT_CANNON_MOUNT.get(),
+				(be, side) -> be.getItemHandler(side));
 	}
 
 	public void onServerStarting(ServerStartingEvent event) {

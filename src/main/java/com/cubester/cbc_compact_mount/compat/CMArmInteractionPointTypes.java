@@ -69,29 +69,29 @@ public class CMArmInteractionPointTypes {
       return super.getInteractionPositionVector();
     }
 
-      @Override
-      public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
-          BlockEntity be = this.getLevel().getBlockEntity(this.pos);
-          PitchOrientedContraptionEntity poce = null;
+    @Override
+    public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
+      BlockEntity be = this.getLevel().getBlockEntity(this.pos);
+      PitchOrientedContraptionEntity poce = null;
 
-          if (be instanceof CompactCannonMountBlockEntity mount) {
-              poce = mount.getContraption();
-          } else if (be instanceof ExtendsCannonMount extendsMount) {
-              CannonMountBlockEntity base = extendsMount.getCannonMount();
-              if (base != null)
-                  poce = base.getContraption();
-          }
-
-          if (poce == null || !(poce.getContraption() instanceof AbstractMountedCannonContraption cannon))
-              return stack;
-
-          if (cannon instanceof MountedBigCannonContraption big) {
-              return CannonMountPoint.bigCannonInsert(stack, simulate, big, poce);
-          }
-          if (cannon instanceof MountedAutocannonContraption auto) {
-              return CannonMountPoint.autocannonInsert(stack, simulate, auto, poce);
-          }
-          return stack;
+      if (be instanceof CompactCannonMountBlockEntity mount) {
+        poce = mount.getContraption();
+      } else if (be instanceof ExtendsCannonMount extendsMount) {
+        CannonMountBlockEntity base = extendsMount.getCannonMount();
+        if (base != null)
+          poce = base.getContraption();
       }
+
+      if (poce == null || !(poce.getContraption() instanceof AbstractMountedCannonContraption cannon))
+        return stack;
+
+      if (cannon instanceof MountedBigCannonContraption big) {
+        return CannonMountPoint.bigCannonInsert(stack, simulate, big, poce);
+      }
+      if (cannon instanceof MountedAutocannonContraption auto) {
+        return CannonMountPoint.autocannonInsert(stack, simulate, auto, poce);
+      }
+      return stack;
+    }
   }
 }

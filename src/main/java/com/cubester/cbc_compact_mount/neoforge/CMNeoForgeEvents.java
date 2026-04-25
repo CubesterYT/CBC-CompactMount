@@ -10,7 +10,6 @@ public class CMNeoForgeEvents {
     public static void onRegister(RegisterEvent evt) {
         evt.register(
                 CreateBuiltInRegistries.ARM_INTERACTION_POINT_TYPE.key(),
-                helper -> CMArmInteractionPointTypes.init()
-        );
+                helper -> CMArmInteractionPointTypes.init());
     }
 }
