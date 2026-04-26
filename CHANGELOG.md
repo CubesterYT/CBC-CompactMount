@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented here.
 
+## v1.2.1 - 4/25/2026
+### Recipe fix
+- Fix dumb issue where the recipe wasn't showing
+
 ## v1.2.0 - 4/24/2026
 ### NeoForge Port
 - Mod is now on NeoForge

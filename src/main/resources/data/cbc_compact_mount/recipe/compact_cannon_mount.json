@@ -2,27 +2,27 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "1": {
+    "G": {
       "item": "minecraft:gunpowder"
     },
-    "2": {
+    "S": {
       "item": "create:iron_sheet"
     },
-    "3": {
+    "H": {
       "item": "create:shaft"
     },
-    "4": {
+    "A": {
       "item": "create:andesite_casing"
-  	}
+    }
   },
   "pattern": [
-      "121",
-      "343",
-      "121"
-   ],
+    "GSG",
+    "HAH",
+    "GSG"
+  ],
   "result": {
-    "item": "cbc_compact_mount:compact_cannon_mount",
+    "id": "cbc_compact_mount:compact_cannon_mount",
     "count": 1
   },
-  "show_notification": false
+  "show_notification": true
 }
