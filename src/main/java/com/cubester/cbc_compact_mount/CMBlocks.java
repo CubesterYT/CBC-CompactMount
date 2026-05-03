@@ -9,7 +9,7 @@ public class CMBlocks {
 	public static final BlockEntry<CompactCannonMountBlock> COMPACT_CANNON_MOUNT = CM.REGISTRATE
 			.block("compact_cannon_mount", CompactCannonMountBlock::new)
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.noOcclusion())
+			.properties(p -> p.noOcclusion().isRedstoneConductor((s, g, pos) -> false))
 			.blockstate((c, p) -> p.horizontalBlock(c.get(), AssetLookup.standardModel(c, p)))
 			.simpleItem()
 			.register();

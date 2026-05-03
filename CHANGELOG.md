@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented here.
 
+## v1.2.2 - 5/3/2026
+### Recipe fix
+- Fixed another dumb issue where the mount acted as a redstone conductor
+
 ## v1.2.1 - 4/25/2026
 ### Recipe fix
 - Fix dumb issue where the recipe wasn't showing
