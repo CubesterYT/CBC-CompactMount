@@ -91,7 +91,25 @@ public class CMArmInteractionPointTypes {
       if (cannon instanceof MountedAutocannonContraption auto) {
         return CannonMountPoint.autocannonInsert(stack, simulate, auto, poce);
       }
-      return stack;
+      return tryInsertUnknownCannon(stack, simulate, cannon, poce);
+    }
+
+    private static ItemStack tryInsertUnknownCannon(ItemStack stack, boolean simulate,
+        AbstractMountedCannonContraption cannon, PitchOrientedContraptionEntity poce) {
+      try {
+        Class<?> medCannonClass = Class.forName(
+            "riftyboi.cbcmodernwarfare.cannon_control.contraption.MountedMediumcannonContraption");
+        if (!medCannonClass.isInstance(cannon))
+          return stack;
+
+        Class<?> cmpClass = Class.forName(
+            "riftyboi.cbcmodernwarfare.cannon_control.compact_mount.CompactCannonMountPoint");
+        java.lang.reflect.Method method = cmpClass.getMethod("mediumcannonInsert",
+            ItemStack.class, boolean.class, medCannonClass, PitchOrientedContraptionEntity.class);
+        return (ItemStack) method.invoke(null, stack, simulate, medCannonClass.cast(cannon), poce);
+      } catch (Exception e) {
+        return stack;
+      }
     }
   }
 }
